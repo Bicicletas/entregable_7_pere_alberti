@@ -18,9 +18,11 @@ public class PlayerController : MonoBehaviour
     public AudioClip salto;
     public AudioClip moneda;
     public AudioClip musica;
+    public bool GameOver;
 
     void Start()
     {
+        GameOver = false;
         //encuentra variables por codigo
         coin = GameObject.Find("money");
         bomb = GameObject.Find("Bomb");
@@ -33,10 +35,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //si se presiona el espacio y enable jump esta en "true" se añade una fuerza hacia arriba al player y se activa un sonido
-        if (Input.GetKeyDown(KeyCode.Space) && enableJump == true)
+        if (Input.GetKeyDown(KeyCode.Space) && enableJump == true && GameOver == false)
         {
             playerRB.AddForce(Vector3.up * force, ForceMode.Impulse);
-            playerAudioSource.PlayOneShot(salto, 1f);
+            // playerAudioSource.PlayOneShot(salto, 1f);
         }
         //si llegas a un limite no puedes segir subiendo
         if (transform.position.y >= yLim)
@@ -67,8 +69,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Bomb"))
         {
-            //destruye el player con un temporizador
-            Destroy(gameObject, 0.35f);
+            GameOver = true;
             //destruye la bomba
             Destroy(collision.gameObject);
             //envia un mensaje por consola
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             //detiene el juego
-            Time.timeScale = 0;
+            GameOver = true;
             //envia un mensaje por consola
             Debug.Log("GAME OVER");
             //desactivas un sonido
@@ -90,8 +91,6 @@ public class PlayerController : MonoBehaviour
     }
     private void OnDestroy()
     {
-        //para el juego una vez se destruya el player
-        Time.timeScale = 0;
         //desactivas un sonido una vez sze destruya el player
         playerAudioSource.Pause();
     }

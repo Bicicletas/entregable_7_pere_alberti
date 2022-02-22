@@ -10,9 +10,11 @@ public class SpawnManager : MonoBehaviour
     private float repeatRate = 1.5f;
     //variable para girar los gameObjects q se spawneen en el lado izquierdo de la pantalla
     private Quaternion offset = Quaternion.Euler(0, 180, 0);
+    public PlayerController PlayerController;
 
     void Start()
     {
+        PlayerController = FindObjectOfType<PlayerController>();
         //Espawnea de manera seguida los objetos instanciados en la funcion SpawnObject
         InvokeRepeating("SpawnObject", startTime, repeatRate);
     }
@@ -23,6 +25,11 @@ public class SpawnManager : MonoBehaviour
         float randomSide = Random.Range(0, 2);
         //escoje de manera random un prefab guardados en la variable randomIndex
         randomIndex = Random.Range(0, prefabs.Length);
+
+        if (PlayerController.GameOver == true)
+        {
+            CancelInvoke();
+        }
 
         if (randomSide == 0)
         {

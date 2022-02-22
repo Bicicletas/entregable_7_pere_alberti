@@ -6,19 +6,27 @@ public class MoveLeft : MonoBehaviour
 {
     private float speed = 5f;
     private float xRange = 16f;
+    public PlayerController PlayerCotroller;
 
+    private void Start()
+    {
+        PlayerCotroller = FindObjectOfType<PlayerController>();
+    }
     void Update()
     {
-        //mover los objetos q tengan el script siempre a la izquierda
-        transform.Translate(Vector3.left * Time.deltaTime * speed);
-        //los dos if sirven para destruir los prefabs que salgan de la pantalla
-        if (transform.position.x < -xRange)
+        if (!PlayerCotroller.GameOver)
         {
-            Destroy(gameObject);
-        }
-        if (transform.position.x > xRange)
-        {
-            Destroy(gameObject);
+            //mover los objetos q tengan el script siempre a la izquierda
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
+            //los dos if sirven para destruir los prefabs que salgan de la pantalla
+            if (transform.position.x < -xRange)
+            {
+                Destroy(gameObject);
+            }
+            if (transform.position.x > xRange)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
